@@ -34,7 +34,6 @@ def launch(
     config = _get_config(
         image=image,
         faucet_config=faucet_config,
-        network_ids=[f.ChainID for f in faucets],
     )
     plan.add_service(service_name, config)
 
@@ -42,14 +41,12 @@ def launch(
 def _get_config(
     image,
     faucet_config,
-    network_ids,
 ):
     """Get the ServiceConfig for the op-faucet service.
 
     Args:
         image (str): The image to use for the op-faucet service.
         faucet_config (artifact): The config artifact for the op-faucet service.
-        network_ids (list of str): The network IDs to use for the op-faucet service.
     """
     mount_path = "/config"
     cmd = [
@@ -70,7 +67,6 @@ def _get_config(
         },
         labels={
             "op.kind": "faucet",
-            "op.network.id": "-".join(network_ids),
         },
         files={
             mount_path: faucet_config,
